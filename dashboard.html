@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    
+
+  <h2>🏌️ Golf Charity Dashboard</h2>
+
+  <!-- SCORE INPUT -->
+  <input type="number" id="score" placeholder="Enter score">
+  <button onclick="addScore()">Add Score</button>
+
+  <!-- SCORES -->
+  <h3>Your Scores</h3>
+  <ul id="scores"></ul>
+
+  <!-- CHARITY -->
+  <h3>Select Charity</h3>
+  <select id="charity"></select>
+
+  <!-- DRAW -->
+  <button onclick="drawWinner()">🎯 Draw Winner</button>
+
+  <!-- RESULT -->
+  <div id="winner"></div>
+  <button onclick="logout()" style="background:red;">
+  🚪 Logout
+</button>
+
+</div>
+
+<!-- Supabase -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<!-- Your JS -->
+<script src="app.js"></script>
+
+<!-- Load scores on page open -->
+<script>
+  window.onload = function () {
+    loadScores();
+    loadCharities();
+  };
+</script>
+
+</body>
+</html>
