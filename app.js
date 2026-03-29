@@ -19,7 +19,7 @@ async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
   });
@@ -35,6 +35,12 @@ async function addScore() {
 
   if (!score) {
     alert("Enter score");
+    return;
+  }
+
+  const scoreNum = parseInt(score);
+  if (scoreNum < 1 || scoreNum > 45) {
+    alert("Score must be between 1 and 45 (Stableford format)");
     return;
   }
 
@@ -59,7 +65,7 @@ async function addScore() {
   const { error } = await supabase.from("scores").insert([
     {
       user_id: user.id,
-      score: parseInt(score),
+      score: scoreNum,
       charity_id: charity,
       date: new Date()
     }
@@ -72,9 +78,9 @@ async function addScore() {
   }
 
   alert("Score added!");
+  document.getElementById("score").value = "";
   loadScores();
 }
-
 
 // ================= LOAD SCORES =================
 async function loadScores() {
@@ -90,6 +96,11 @@ async function loadScores() {
   const list = document.getElementById("scores");
   list.innerHTML = "";
 
+  if (!scores || scores.length === 0) {
+    list.innerHTML = "<li>No scores yet</li>";
+    return;
+  }
+
   scores.forEach(score => {
     const li = document.createElement("li");
     li.innerText = score.score + " (" + new Date(score.date).toLocaleString() + ")";
@@ -97,19 +108,19 @@ async function loadScores() {
   });
 }
 
-
-//charaties
+// ================= LOAD CHARITIES =================
 async function loadCharities() {
   let { data: charities, error } = await supabase
     .from("charities")
     .select("*");
 
-  console.log("CHARITIES DATA:", charities);
-  console.log("ERROR:", error);
+  if (error) {
+    console.log("Charities error:", error);
+    return;
+  }
 
   const dropdown = document.getElementById("charity");
-
-  dropdown.innerHTML = '<option value="">--Select--</option>';
+  dropdown.innerHTML = '<option value="">-- Select Charity --</option>';
 
   charities.forEach(c => {
     const option = document.createElement("option");
@@ -118,14 +129,6 @@ async function loadCharities() {
     dropdown.appendChild(option);
   });
 }
-
-
-  // random winner
-  const randomIndex = Math.floor(Math.random() * scores.length);
-  const winner = scores[randomIndex];
-
-  document.getElementById("winner").innerText =
-    "Winner Score: " + winner.score;
 
 // ================= DRAW WINNER =================
 async function drawWinner() {
@@ -137,23 +140,21 @@ async function drawWinner() {
     .select("*")
     .eq("user_id", user.id);
 
-  // ✅ safety check
   if (!scores || scores.length === 0) {
-    alert("No scores available");
+    alert("No scores available to draw from");
     return;
   }
 
   const randomIndex = Math.floor(Math.random() * scores.length);
   const winner = scores[randomIndex];
 
-  // ✅ EXTRA SAFETY
   if (!winner) {
     alert("Error selecting winner");
     return;
   }
 
   document.getElementById("winner").innerText =
-    "Winner Score: " + winner.score;
+    "🏆 Winner Score: " + winner.score;
 
   const { error } = await supabase.from("winners").insert([
     {
@@ -166,19 +167,19 @@ async function drawWinner() {
 
   if (error) {
     console.log(error);
-    alert("Winner save failed");
+    alert("Winner save failed: " + error.message);
   } else {
     console.log("Winner saved!");
   }
 }
 
-//logout button
+// ================= LOGOUT =================
 async function logout() {
   await supabase.auth.signOut();
   window.location.href = "login.html";
 }
 
-
+// ================= AUTH GUARD =================
 async function checkUser() {
   const { data } = await supabase.auth.getUser();
   if (!data.user) {
