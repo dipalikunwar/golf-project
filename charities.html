@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charities — GolfGives</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html"><div class="logo">⛳ GolfGives</div></a>
+  <a href="dashboard.html"><button class="nav-btn">Dashboard</button></a>
+</nav>
+
+<div class="page-container">
+  <h2>❤️ Our Charities</h2>
+  <p>Your subscription supports these amazing causes.</p>
+
+  <div class="search-bar">
+    <input type="text" id="charity-search"
+           placeholder="🔍 Search charities..."
+           oninput="filterCharities()">
+  </div>
+
+  <div id="charity-grid" class="charity-grid">
+    <!-- Loaded by JS -->
+  </div>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+<script>
+  window.onload = loadCharityPage;
+</script>
+
+</body>
+</html>

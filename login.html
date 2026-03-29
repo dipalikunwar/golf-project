@@ -1,28 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Login</title>
-
-  <!-- CSS always here -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — GolfGives</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="container">
+<nav class="navbar">
+  <a href="index.html"><div class="logo">⛳ GolfGives</div></a>
+</nav>
 
-  <h2>🔐 Login / Signup</h2>
+<div class="auth-container">
+  <div class="auth-tabs">
+    <button class="tab-btn active" onclick="showTab('login')">Login</button>
+    <button class="tab-btn" onclick="showTab('signup')">Sign Up</button>
+  </div>
 
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
+  <!-- LOGIN -->
+  <div id="login-tab">
+    <h2>Welcome Back 👋</h2>
+    <input type="email" id="login-email" placeholder="Email address">
+    <input type="password" id="login-password" placeholder="Password">
+    <button onclick="login()" class="cta-btn">Login</button>
+  </div>
 
-  <button onclick="signup()">Signup</button>
-  <button onclick="login()">Login</button>
+  <!-- SIGNUP -->
+  <div id="signup-tab" style="display:none;">
+    <h2>Join GolfGives 🏌️</h2>
+    <input type="text" id="signup-name" placeholder="Full Name">
+    <input type="email" id="signup-email" placeholder="Email address">
+    <input type="password" id="signup-password" placeholder="Password (min 6 chars)">
 
+    <label>Choose Your Plan:</label>
+    <select id="plan">
+      <option value="monthly">Monthly — ₹499/month</option>
+      <option value="yearly">Yearly — ₹4,999/year (Save 17%)</option>
+    </select>
+
+    <label>Charity Contribution:</label>
+    <select id="charity-percent">
+      <option value="10">10% (Minimum)</option>
+      <option value="15">15%</option>
+      <option value="20">20%</option>
+      <option value="25">25%</option>
+    </select>
+
+    <button onclick="signup()" class="cta-btn">Create Account 🚀</button>
+  </div>
+
+  <div id="auth-message"></div>
 </div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="app.js"></script>
+<script>
+  function showTab(tab) {
+    document.getElementById('login-tab').style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById('signup-tab').style.display = tab === 'signup' ? 'block' : 'none';
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+</script>
 
 </body>
 </html>

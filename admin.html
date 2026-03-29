@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — GolfGives</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">⛳ GolfGives Admin</div>
+  <button onclick="logout()" class="logout-btn">Logout</button>
+</nav>
+
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <div class="admin-sidebar">
+    <button onclick="showSection('overview')" class="sidebar-btn active">📊 Overview</button>
+    <button onclick="showSection('users')" class="sidebar-btn">👥 Users</button>
+    <button onclick="showSection('draw')" class="sidebar-btn">🎯 Draw</button>
+    <button onclick="showSection('charities')" class="sidebar-btn">❤️ Charities</button>
+    <button onclick="showSection('winners')" class="sidebar-btn">🏆 Winners</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="admin-main">
+
+    <!-- OVERVIEW -->
+    <div id="section-overview" class="admin-section">
+      <h2>📊 Platform Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3 id="total-users">—</h3>
+          <p>Total Users</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="total-pool">—</h3>
+          <p>Prize Pool</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="total-charity">—</h3>
+          <p>Charity Contributions</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="total-draws">—</h3>
+          <p>Draws Run</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div id="section-users" class="admin-section" style="display:none;">
+      <h2>👥 User Management</h2>
+      <div id="users-table"></div>
+    </div>
+
+    <!-- DRAW -->
+    <div id="section-draw" class="admin-section" style="display:none;">
+      <h2>🎯 Draw Management</h2>
+      <label>Draw Type:</label>
+      <select id="draw-type">
+        <option value="random">Random</option>
+        <option value="algorithmic">Algorithmic (Weighted)</option>
+      </select>
+      <button onclick="runSimulation()" class="cta-btn">▶ Run Simulation</button>
+      <button onclick="publishDraw()" class="cta-btn" 
+              style="background:linear-gradient(45deg,#11998e,#38ef7d)">
+        ✅ Publish Draw
+      </button>
+      <div id="simulation-result"></div>
+    </div>
+
+    <!-- CHARITIES -->
+    <div id="section-charities" class="admin-section" style="display:none;">
+      <h2>❤️ Charity Management</h2>
+      <div class="add-charity-form">
+        <input type="text" id="new-charity-name" placeholder="Charity Name">
+        <input type="text" id="new-charity-desc" placeholder="Description">
+        <button onclick="addCharity()" class="cta-btn">+ Add Charity</button>
+      </div>
+      <div id="admin-charity-list"></div>
+    </div>
+
+    <!-- WINNERS -->
+    <div id="section-winners" class="admin-section" style="display:none;">
+      <h2>🏆 Winner Verification</h2>
+      <div id="winners-admin-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+<script src="admin.js"></script>
+<script>
+  window.onload = function() {
+    checkAdmin();
+    loadOverview();
+  };
+
+  function showSection(name) {
+    document.querySelectorAll('.admin-section').forEach(s => s.style.display = 'none');
+    document.getElementById('section-' + name).style.display = 'block';
+    document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

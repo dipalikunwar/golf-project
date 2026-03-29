@@ -1,50 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — GolfGives</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-    
+<nav class="navbar">
+  <a href="index.html"><div class="logo">⛳ GolfGives</div></a>
+  <div>
+    <span id="user-email" style="color:white; margin-right:15px;"></span>
+    <button onclick="logout()" class="logout-btn">🚪 Logout</button>
+  </div>
+</nav>
 
-  <h2>🏌️ Golf Charity Dashboard</h2>
+<div class="dashboard-grid">
 
-  <!-- SCORE INPUT -->
-  <input type="number" id="score" placeholder="Enter score">
-  <button onclick="addScore()">Add Score</button>
+  <!-- SUBSCRIPTION STATUS -->
+  <div class="dash-card">
+    <h3>📋 Subscription</h3>
+    <div id="sub-status" class="status-badge">Loading...</div>
+    <p id="sub-plan"></p>
+    <p id="sub-renewal"></p>
+  </div>
 
-  <!-- SCORES -->
-  <h3>Your Scores</h3>
-  <ul id="scores"></ul>
+  <!-- SCORE ENTRY -->
+  <div class="dash-card">
+    <h3>🏌️ Add Score</h3>
+    <input type="number" id="score" placeholder="Score (1-45)" min="1" max="45">
+    <input type="date" id="score-date">
+    <select id="charity"></select>
+    <button onclick="addScore()" class="cta-btn">Add Score</button>
+
+    <h4>Your Last 5 Scores:</h4>
+    <ul id="scores"></ul>
+  </div>
 
   <!-- CHARITY -->
-  <h3>Select Charity</h3>
-  <select id="charity"></select>
+  <div class="dash-card">
+    <h3>❤️ Your Charity</h3>
+    <div id="charity-info">Loading...</div>
+    <p>Contribution: <strong id="charity-percent-display">10%</strong></p>
+    <a href="charities.html"><button class="nav-btn">Browse Charities</button></a>
+  </div>
 
-  <!-- DRAW -->
-  <button onclick="drawWinner()">🎯 Draw Winner</button>
+  <!-- DRAW PARTICIPATION -->
+  <div class="dash-card">
+    <h3>🎯 Monthly Draw</h3>
+    <p id="draw-status">Next draw: End of month</p>
+    <div id="draw-numbers" class="draw-balls"></div>
+    <button onclick="simulateDraw()" class="cta-btn">🎲 Simulate Draw</button>
+    <div id="winner" class="winner-box" style="display:none;"></div>
+  </div>
 
-  <!-- RESULT -->
-  <div id="winner"></div>
-  <button onclick="logout()" style="background:red;">
-  🚪 Logout
-</button>
+  <!-- WINNINGS -->
+  <div class="dash-card">
+    <h3>🏆 My Winnings</h3>
+    <p>Total Won: <strong id="total-won">₹0</strong></p>
+    <div id="winners-list"></div>
+  </div>
+
+  <!-- PRIZE POOL INFO -->
+  <div class="dash-card">
+    <h3>💰 Prize Pool</h3>
+    <div class="prize-mini">
+      <span>5-Match (Jackpot)</span><strong>40%</strong>
+    </div>
+    <div class="prize-mini">
+      <span>4-Match</span><strong>35%</strong>
+    </div>
+    <div class="prize-mini">
+      <span>3-Match</span><strong>25%</strong>
+    </div>
+    <p id="pool-total" style="margin-top:10px; font-weight:bold;"></p>
+  </div>
 
 </div>
 
-<!-- Supabase -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-<!-- Your JS -->
 <script src="app.js"></script>
-
-<!-- Load scores on page open -->
 <script>
-  window.onload = function () {
-    loadScores();
-    loadCharities();
+  window.onload = function() {
+    initDashboard();
   };
 </script>
 
